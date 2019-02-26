@@ -2,20 +2,21 @@ package lev.filippov;
 
 public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
 
-    private Link<E> newlink;
-    private Link<E> firstLink;
-    private int size;
+    protected Link<E> newLink;
+    protected Link<E> firstLink;
+    protected int size;
 
     @Override
     public void add(E value) {
-    newlink = new Link<>(value);
-    newlink.setNextLink(firstLink);
+
+    newLink = new Link<>(value);
+    newLink.setNextLink(firstLink);
 
     if(!isEmpty()) {
-       firstLink.setPreviousLink(newlink);
+       firstLink.setPreviousLink(newLink);
     }
 
-    firstLink = newlink;
+    firstLink = newLink;
     size++;
     }
 
@@ -25,7 +26,6 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
 
         while(current != null) {
             if (current.getElement().equals(value)) {
-                size--;
                 return current;
             }
             current = current.getNextLink();

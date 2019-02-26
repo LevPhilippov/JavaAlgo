@@ -2,21 +2,54 @@ package lev.filippov;
 
 public class LionDoubleSidedLinkedListImpl<E> extends LionSimpleLinkedListImpl<E> implements LionDoubleSidedLinkedList <E> {
 
-    private Link <E> lastElement;
+    protected Link <E> lastLink;
 
     @Override
-    public E getLast() {
-        return null;
+    public void addLast(E value) {
+        newLink = new Link<>(value);
+        newLink.setPreviousLink(lastLink);
+
+        if(!isEmpty()) { //если список уже содержит ссылку на lastLink
+            lastLink.setNextLink(newLink);
+        }
+        lastLink = newLink;
+
+        if (isEmpty()) { //если список пуст - присваиваем firstLink и lastLink одну и ту же ссылку
+            firstLink = lastLink;
+        }
+        size++;
+    }
+
+    @Override
+    public Link<E> getLast() {
+        return lastLink;
     }
 
     @Override
     public E removeLast() {
-        return null;
+        E temp = lastLink.getElement();
+        lastLink = lastLink.getPreviousLink();
+        lastLink.setNextLink(null);
+        size--;
+        return temp;
     }
 
     @Override
     public void add(E value) {
-        super.add(value);
+        newLink = new Link<>(value);
+        newLink.setNextLink(firstLink);
+
+        if(!isEmpty()) { //если список уже содержит ссылку на firstLink
+            firstLink.setPreviousLink(newLink);
+        }
+
+        firstLink = newLink;
+
+        if(isEmpty()) { //если список пуст - присваиваем firstLink и lastLink одну и ту же ссылку
+            lastLink = firstLink;
+        }
+        size++;
+
     }
 
     @Override
