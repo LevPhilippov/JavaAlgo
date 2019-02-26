@@ -14,5 +14,7 @@ public interface LionSimpleLinkedList<E> {
 
     void display();
 
+    int size();
+
 
 }

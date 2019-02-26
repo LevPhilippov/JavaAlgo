@@ -81,4 +81,9 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
         System.out.println("-----------------");
 
     }
+
+    @Override
+    public int size() {
+        return size;
+    }
 }
