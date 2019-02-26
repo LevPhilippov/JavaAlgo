@@ -1,6 +1,5 @@
 package lev.filippov;
 
-import oracle.jrockit.jfr.ActiveSettingEvent;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Before;
