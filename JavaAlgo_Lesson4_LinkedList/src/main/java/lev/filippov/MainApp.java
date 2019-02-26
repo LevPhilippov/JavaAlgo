@@ -47,11 +47,16 @@ public class MainApp {
         dslist.removeFirst();
         dslist.display();
         //удаляем последний элемент
+        dslist.removeLast();
+
         dslist.display();
         //удаляем какой-нибудь существующий элемент
         dslist.remove(444);
         dslist.display();
 
-
+        for (Integer o: dslist) {
+            System.out.println(o);
+        }
     }
+
 }

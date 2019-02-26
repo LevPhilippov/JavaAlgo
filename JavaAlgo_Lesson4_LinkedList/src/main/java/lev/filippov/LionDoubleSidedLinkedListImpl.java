@@ -27,9 +27,15 @@ public class LionDoubleSidedLinkedListImpl<E> extends LionSimpleLinkedListImpl<E
 
     @Override
     public E removeLast() {
+        if(isEmpty()) {
+            return null;
+        }
         E temp = lastLink.getElement();
         lastLink = lastLink.getPreviousLink();
-        lastLink.setNextLink(null);
+
+        if(lastLink!=null){
+            lastLink.setNextLink(null);
+        }
         size--;
         return temp;
     }
@@ -54,12 +60,30 @@ public class LionDoubleSidedLinkedListImpl<E> extends LionSimpleLinkedListImpl<E
 
     @Override
     public E remove(E value) {
-        return super.remove(value);
-    }
+        Link <E> current;
+        if ((current = find(value)) == null) {
+            return null;
+        }
+
+        if(current==firstLink){
+            return removeFirst();
+        }
+
+        if (current==lastLink){
+            return removeLast();
+        }
+
+        current.getPreviousLink().setNextLink(current.getNextLink());
+        current.getNextLink().setPreviousLink(current.getPreviousLink());
+
+        size--;
+        return current.getElement();
+            }
 
     @Override
     public E removeFirst() {
         return super.removeFirst();
+
     }
 
     @Override

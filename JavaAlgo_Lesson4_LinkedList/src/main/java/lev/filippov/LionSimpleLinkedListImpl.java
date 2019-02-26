@@ -1,6 +1,8 @@
 package lev.filippov;
 
-public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
+import java.util.*;
+
+public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E>, Iterable<E> {
 
     Link<E> newLink;
     Link<E> firstLink;
@@ -20,7 +22,7 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
     size++;
     }
 
-    private Link <E> find(E value) {
+    protected Link <E> find(E value) {
 
         Link <E> current = firstLink;
 
@@ -40,8 +42,13 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
         if ((current = find(value)) == null) {
             return null;
         }
+
+        if(current==firstLink){
+        return removeFirst();
+        }
         current.getPreviousLink().setNextLink(current.getNextLink());
         current.getNextLink().setPreviousLink(current.getPreviousLink());
+
         size--;
         return current.getElement();
     }
@@ -54,7 +61,10 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
         }
         E temp = firstLink.getElement();
         firstLink = firstLink.getNextLink();
-        firstLink.getNextLink().setPreviousLink(null);
+
+        if(firstLink!=null){
+            firstLink.setPreviousLink(null);
+        }
         size--;
         return temp;
     }
@@ -85,5 +95,49 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
     @Override
     public int size() {
         return size;
+    }
+
+    //...................................методы для итератора.............................
+
+    @Override
+    public Iterator <E> iterator() {
+        return new MyIterator<>();
+    }
+
+    // класс итератор
+    private class MyIterator<E> implements Iterator<E> {
+
+        int cursor;       // index of next element to return
+        int lastRet=-1; // index of last element returned; -1 if no such
+        Object current;
+
+        @Override
+        public boolean hasNext() {
+            return cursor < size;
+        }
+
+        @Override
+        public E next() {
+            if(!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            int i = lastRet;
+
+            while(i < cursor) {
+
+                if(current == null) {
+                    current = firstLink;
+                    i++;
+                    break;
+                }
+
+                current = ((Link)current).getNextLink();
+                i++;
+            }
+
+            lastRet = i;
+            cursor = i+1;
+            return (E)((Link) current).getElement() ;
+        }
     }
 }
