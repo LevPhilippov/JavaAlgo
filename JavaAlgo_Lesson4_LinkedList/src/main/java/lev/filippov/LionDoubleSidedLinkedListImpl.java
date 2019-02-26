@@ -21,8 +21,8 @@ public class LionDoubleSidedLinkedListImpl<E> extends LionSimpleLinkedListImpl<E
     }
 
     @Override
-    public Link<E> getLast() {
-        return lastLink;
+    public E getLast() {
+        return lastLink.getElement();
     }
 
     @Override

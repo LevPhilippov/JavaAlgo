@@ -8,29 +8,29 @@ public class Link <E> {
 
     private Link <E> previousLink;
 
-    public Link(E value) {
+    Link(E value) {
         element = value;
         nextLink = null;
         previousLink = null;
     }
 
-    public E getElement() {
+    E getElement() {
         return element;
     }
 
-    public Link<E> getNextLink() {
+    Link<E> getNextLink() {
         return nextLink;
     }
 
-    public void setNextLink(Link<E> nextLink) {
+    void setNextLink(Link<E> nextLink) {
         this.nextLink = nextLink;
     }
 
-    public void setPreviousLink(Link<E> previousLink) {
+    void setPreviousLink(Link<E> previousLink) {
         this.previousLink = previousLink;
     }
 
-    public Link<E> getPreviousLink() {
+    Link<E> getPreviousLink() {
         return previousLink;
     }
 
@@ -44,11 +44,8 @@ public class Link <E> {
         }
         E o = (E) obj;
 
-        if (this.equals(o)) {
-            return true;
-        }
+        return this.equals(o);
 
-        return false;
     }
 
     public String toString() {

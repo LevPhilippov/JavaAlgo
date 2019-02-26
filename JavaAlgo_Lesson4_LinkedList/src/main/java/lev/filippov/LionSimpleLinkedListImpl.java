@@ -2,9 +2,9 @@ package lev.filippov;
 
 public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
 
-    protected Link<E> newLink;
-    protected Link<E> firstLink;
-    protected int size;
+    Link<E> newLink;
+    Link<E> firstLink;
+    int size;
 
     @Override
     public void add(E value) {
@@ -32,7 +32,7 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E> {
         }
 
         return null;
-    };
+    }
 
     @Override
     public E remove(E value) {
