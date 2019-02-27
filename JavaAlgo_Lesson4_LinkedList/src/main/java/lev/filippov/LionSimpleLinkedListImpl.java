@@ -46,6 +46,7 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E>, Ite
         if(current==firstLink){
         return removeFirst();
         }
+
         current.getPreviousLink().setNextLink(current.getNextLink());
         current.getNextLink().setPreviousLink(current.getPreviousLink());
 
@@ -101,43 +102,87 @@ public class LionSimpleLinkedListImpl<E> implements LionSimpleLinkedList<E>, Ite
 
     @Override
     public Iterator <E> iterator() {
-        return new MyIterator<>();
+        return new MyIterator<E>();
     }
 
     // класс итератор
-    private class MyIterator<E> implements Iterator<E> {
+    private class MyIterator<T> implements Iterator<T> {
 
-        int cursor;       // index of next element to return
+        int cursor=0;       // index of next element to return
         int lastRet=-1; // index of last element returned; -1 if no such
-        Object current;
+        Link<E> current;
+        boolean REMOVED_MARK = true;
 
         @Override
         public boolean hasNext() {
-            return cursor < size;
+            return (cursor < size);
         }
 
         @Override
-        public E next() {
+        public T next() {
+
             if(!hasNext()) {
                 throw new NoSuchElementException();
             }
-            int i = lastRet;
 
-            while(i < cursor) {
-
-                if(current == null) {
-                    current = firstLink;
-                    i++;
-                    break;
+            if(current == null) {
+                current = firstLink;
+                lastRet++;
                 }
-
-                current = ((Link)current).getNextLink();
-                i++;
+            else {
+                current = current.getNextLink();
+                lastRet++;
             }
 
-            lastRet = i;
-            cursor = i+1;
-            return (E)((Link) current).getElement() ;
+            cursor = lastRet+1;
+
+            REMOVED_MARK = false;
+            return (T)current.getElement();
+        }
+        /**
+         * Removes from the underlying collection the last element returned
+         * by this iterator (optional operation).  This method can be called
+         * only once per call to {@link #next}.  The behavior of an iterator
+         * is unspecified if the underlying collection is modified while the
+         * iteration is in progress in any way other than by calling this
+         * method.
+         *
+         * @implSpec
+         * The default implementation throws an instance of
+         * {@link UnsupportedOperationException} and performs no other action.
+         *
+         * @throws UnsupportedOperationException if the {@code remove}
+         *         operation is not supported by this iterator
+         *
+         * @throws IllegalStateException if the {@code next} method has not
+         *         yet been called, or the {@code remove} method has already
+         *         been called after the last call to the {@code next}
+         *         method
+         */
+
+        @Override
+        public void remove() {
+
+            if(lastRet == -1 || REMOVED_MARK){
+                throw new IllegalStateException();
+            }
+
+            if(current==firstLink){
+                firstLink = current.getNextLink();
+            }
+            if(lastRet==0) {
+                current.getNextLink().setPreviousLink((current.getPreviousLink()));
+            } else if (cursor == size) {
+                current.getPreviousLink().setNextLink((current.getNextLink()));
+            } else {
+            current.getPreviousLink().setNextLink(current.getNextLink());
+            current.getNextLink().setPreviousLink(current.getPreviousLink());
+            }
+
+            size--;
+            lastRet--;
+            cursor = lastRet+1;
+            REMOVED_MARK = true;
         }
     }
 }

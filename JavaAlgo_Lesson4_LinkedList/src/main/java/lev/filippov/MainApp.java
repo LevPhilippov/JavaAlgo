@@ -1,5 +1,7 @@
 package lev.filippov;
 
+import java.util.Iterator;
+
 public class MainApp {
 
     public static final int WRONG_VALUE = 777;
@@ -54,9 +56,43 @@ public class MainApp {
         dslist.remove(444);
         dslist.display();
 
-        for (Integer o: dslist) {
-            System.out.println(o);
+        LionSimpleLinkedListImpl<Integer> forEachTst = new LionSimpleLinkedListImpl<Integer>(){{
+           add(1);
+           add(2);
+           add(3);
+           add(4);
+           add(5);
+        }};
+
+
+
+        Iterator<Integer> listIter = forEachTst.iterator();
+        printListThroughForEach(forEachTst);
+        System.out.println(listIter.next());
+        printListThroughForEach(forEachTst);
+        System.out.println(listIter.next());
+        listIter.remove();
+        printListThroughForEach(forEachTst);
+
+        Iterator<Integer> listIter2 = new LionSimpleLinkedListImpl<Integer>(){{
+            add(1);
+            add(2);
+            add(3);
+            add(4);
+            add(5);
+        }}.iterator();
+
+        while (listIter2.hasNext()) {
+            System.out.print(listIter2.next());
         }
+
     }
 
+    private static  <E> void printListThroughForEach(LionSimpleLinkedListImpl<E> list ) {
+        System.out.println("----------------------");
+        for (E o: list){
+            System.out.print(o);
+        }
+        System.out.println("\n----------------------");
+    }
 }
