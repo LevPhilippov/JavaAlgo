@@ -1,13 +1,13 @@
 package lev.filippov;
 
-public interface DequeInt<E> {
-    void insertFront(E value); // Adds an item at the front of Deque.
-    void insertRear(E value); // Adds an item at the rear of Deque.
-    E deleteFront(); // Deletes an item from front of Deque.
-    E deleteRear(); //Deletes an item from rear of Deque.
+public interface DequeInt<E> extends QueueInt<E>  {
+
+    void insertLeft(E value); // Adds an item at the front of Deque.
+    void insertRight(E value); // Adds an item at the end of Deque.
+    E deleteLeft(); // Deletes an item from front of Deque.
+
+    E deleteRight(); //Deletes an item from end of Deque.
 
     E getFront(); // Gets the front item from queue.
-    E getRear(); //Gets the last item from queue.
-    boolean isEmpty(); // Checks whether Deque is empty or not.
-    boolean isFull(); //Checks whether Deque is full or not.
+    E getEnd(); //Gets the last item from queue.
 }

@@ -1,127 +1,139 @@
 package lev.filippov;
 //Создать класс для реализации дека.
 
-public class Deque<E> implements DequeInt<E> {
-
-    public static final int MAX_SIZE = 16;
-    public static final int FRONT = -1;
-    public static final int REAR = 0;
-    int front;
-    int rear;
-    int size;
-    E data[];
+public class Deque<E> extends Queue<E> implements DequeInt<E>  {
 
     public Deque(int maxSize) {
-        data = (E[])new Object[maxSize];
-        front = FRONT;
-        rear = REAR;
-        size = 0;
+        super(maxSize);
     }
 
-    public Deque() {
+    public Deque () {
         this(MAX_SIZE);
     }
 
     @Override
-    public void insertFront(E value) {
-        if (isFull())
-            throw new RuntimeException("Impossible to push new element - the stack is already full.");
+    public void insertLeft(E value) {
+        super.push(value);
 
-        if(isEmpty()){
-            front=0;
-            rear=0;
+//        if (isFull())
+//            throw new RuntimeException("Impossible to push new element - the stack is already full.");
+//
+//        if(isEmpty()){
+//            front=0;
+//            end=0;
+//        }
+//
+//        else if (front==0)
+//            front = data.length-1;
+//
+//        data[front] = value;
+//        size++;
+    }
+
+    @Override
+    public E deleteLeft() {
+        return super.pop();
+//        getFront();
+//        //если остался последний элемент
+//        if (front == end){
+//            E temp = data[front];
+//            end = FRONT;
+//            front = FRONT;
+//            size--;
+//            return temp;
+//        }
+//
+//        if (front == data.length-1) {
+//            E temp = data[front];
+//            front--;
+//            size--;
+//            return temp;
+//        }
+//
+//        size--;
+//        return data[front++];
+    }
+
+    @Override
+    public void insertRight(E value) {
+        if(isFull()){
+            throw new RuntimeException();
+        }
+        if(front==0){
+            front = data.length;
         }
 
-        else if (front==0)
-            front = data.length-1;
-
-        data[front] = value;
+        data[--front] = value;
         size++;
+
+//        if (isFull())
+//            throw new RuntimeException("Impossible to push new element - the stack is already full.");
+//
+//        if(isEmpty()){
+//            front=0;
+//            end =0;
+//        }
+//        else if(end == data.length-1)
+//            end = END;
+//        else
+//            end++;
+//
+//        data[end] = value;
+//        size++;
     }
 
     @Override
-    public E deleteFront() {
-        getFront();
-        //если остался последний элемент
-        if (front == rear){
-            E temp = data[front];
-            rear = FRONT;
-            front = FRONT;
-            size--;
-            return temp;
+    public E deleteRight() {
+        if(isEmpty()) {
+            throw new RuntimeException();
         }
-
-        if (front == data.length-1) {
-            E temp = data[front];
-            front--;
-            size--;
-            return temp;
-        }
-
         size--;
-        return data[front++];
-    }
 
-    @Override
-    public void insertRear(E value) {
-        if (isFull())
-            throw new RuntimeException("Impossible to push new element - the stack is already full.");
-
-        if(isEmpty()){
-            front=0;
-            rear=0;
-        }
-        else if(rear == data.length-1)
-            rear = REAR;
-        else
-            rear++;
-
-        data[rear] = value;
-        size++;
-    }
-
-    @Override
-    public E deleteRear() {
-        getRear();
-        //последний элемент
-        if (front==rear){
-            E temp = data[rear];
-            rear = FRONT;
-            front = FRONT;
-            size--;
-            return temp;
-        }
-        if (rear == REAR) {
-            size--;
-            return data[(rear = data.length-1)];
+        if(end==END){
+            end=data.length-1;
         }
 
-        size--;
-        return data[rear--];
+        return data[end--];
+//        getEnd();
+//        //последний элемент
+//        if (front== end){
+//            E temp = data[end];
+//            end = FRONT;
+//            front = FRONT;
+//            size--;
+//            return temp;
+//        }
+//        if (end == END) {
+//            size--;
+//            return data[(end = data.length-1)];
+//        }
+//
+//        size--;
+//        return data[end--];
     }
 
     @Override
     public E getFront() {
         if (isEmpty())
-            throw  new RuntimeException("Not possible to delete the element. The stack is already empty.");
+            throw  new RuntimeException("The stack is empty.");
         return data[front];
     }
 
     @Override
-    public E getRear() {
+    public E getEnd() {
         if (isEmpty())
-            throw  new RuntimeException("Not possible to delete the element. The stack is already empty.");
-        return data[rear];
+            throw  new RuntimeException("The stack is empty.");
+        return data[end];
     }
 
     @Override
     public boolean isEmpty() {
-        return front == -1;
+        return super.isEmpty();
     }
 
     @Override
     public boolean isFull() {
-        return front == rear+1 || front==0 && rear==data.length-1;
+        return super.isFull();
     }
 
     public int getSize() {
