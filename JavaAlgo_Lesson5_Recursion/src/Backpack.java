@@ -1,93 +1,93 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Backpack {
 
-    Piece[] pieces;
-    Piece[] backpackCapacity;
+    ArrayList<Piece> pieces;
+    ArrayList<Piece> currentBP;
+    int numberOfPieces;
+    int lvl;
+    ArrayList<Piece> tempList;
     int maxLoad;
-    int maxWeight;
     int maxValue;
-    Piece[] maxValueBP;
+    ArrayList<Piece> maxValueBP;
 
-    public Backpack(int maxLoad, int numberOfPieces) {
+    public Backpack(int maxLoad) {
         this.maxLoad = maxLoad;
-        backpackCapacity = new Piece[numberOfPieces];
-        maxWeight = 0;
-        maxValue =  0;
-        maxValueBP = new Piece[numberOfPieces];
+        numberOfPieces = pieces.size();
+        currentBP = new ArrayList<>();
+        //currentBP = new Piece[numberOfPieces];
+        maxValueBP = new ArrayList<>();
+        //maxValueBP = new Piece[numberOfPieces];
+        lvl=-1;
     }
 
     {
-        pieces = new Piece[]
-                {
-                new Piece("Binocular", 2,5000),
-                new Piece("Book",1,600),
-                new Piece("FirstAidKit", 4, 1500),
-                new Piece("Laptop", 2, 40000),
-                new Piece("Bowl", 1,500)
-                };
-
+        pieces = new ArrayList<Piece>(){
+            {
+                add(new Piece("Binocular", 2,5000));
+                add(new Piece("Book",1,600));
+                add(new Piece("FirstAidKit", 4, 1500));
+                add(new Piece("Laptop", 2, 40000));
+                add(new Piece("Bowl", 1,500));
+            };
+        };
     }
 
-    public void fillIt(){
-        fillIt(0);
-        System.out.println("Максимальный вес равен: " + maxValue);
-        System.out.println(Arrays.toString(maxValueBP));
+
+    public void find(){
+        findBestSet(0);
+        System.out.println(maxValue);
+        System.out.println("Best set is " + maxValueBP);
     }
 
-    private void fillIt(int count){  // ограничение в 5 предметов в рюкзаке
+    private void findBestSet(int index){
+        if(sumWeight()>maxLoad){
+            currentBP.remove(lvl);
+//            int tempValue = sumValue();
+//            if(tempValue >= maxValue)
+//                maxLoad = tempValue;
 
-        if(backpackCapacity.length - count < 1) {
-
-            if (sum()>maxLoad) {
-                return;
+            if(!(currentBP.equals(tempList))) {
+                System.out.println(currentBP + " " + evaluate());
+                tempList = new ArrayList<>(currentBP);
             }
 
-            System.out.println(Arrays.toString(backpackCapacity) + " " + sum() + " " + sumValue());
-
-            if (maxValue < sumValue()) {  // определяем максимальный value (потом удалить)
-                maxValue = sumValue();
-                for (int i = 0; i<maxValueBP.length; i++)   {
-                    maxValueBP[i]=backpackCapacity[i];
-                }
-            }
-
+            lvl--;
             return;
         }
 
-        for (int i = 0; i <pieces.length ; i++) {
-
-            backpackCapacity[count] = pieces[i];
-
-            fillIt(count+1);
-
+        for (int i = 0; i < numberOfPieces; i++) {
+            clear(i);
+            currentBP.add(pieces.get(i));
+            lvl++;
+            findBestSet(i);
         }
-
+        lvl--;
     }
 
+    private void clear(int i) {
+        for (int j = currentBP.size()-1; j > lvl; j--){
+                currentBP.remove(j);
+            }
+        }
 
-
-    private int sum(){
+    private int sumWeight(){
         int weight = 0;
-        for (Piece o: backpackCapacity) {
+        for (Piece o: currentBP) {
             weight += o.getWeight();
         }
         return weight;
     }
 
-    private int sumValue(){
-        int value = 0;
-        for (Piece o: backpackCapacity) {
-            value += o.getValue();
+    private int evaluate(){
+        int tempValue = 0;
+        for (Piece o: currentBP) {
+            tempValue += o.getValue();
         }
-        return value;
+        if (maxValue < tempValue) {
+            maxValue=tempValue;
+            maxValueBP = new ArrayList<>(currentBP);
+        }
+        return tempValue;
     }
-
-
-    public static void main(String[] args) {
-        new Backpack(7,5).fillIt();
-    }
-
-
 }
