@@ -2,22 +2,20 @@ import java.util.ArrayList;
 
 public class Backpack {
 
-    ArrayList<Piece> pieces;
-    ArrayList<Piece> currentBP;
-    int numberOfPieces;
-    int lvl;
-    ArrayList<Piece> tempList;
-    int maxLoad;
-    int maxValue;
-    ArrayList<Piece> maxValueBP;
+    private ArrayList<Piece> pieces;
+    private ArrayList<Piece> currentBP;
+    private int numberOfPieces;
+    private int lvl;
+    private ArrayList<Piece> tempList;
+    private int maxLoad;
+    private int maxValue;
+    private ArrayList<Piece> maxValueBP;
 
     public Backpack(int maxLoad) {
         this.maxLoad = maxLoad;
         numberOfPieces = pieces.size();
         currentBP = new ArrayList<>();
-        //currentBP = new Piece[numberOfPieces];
         maxValueBP = new ArrayList<>();
-        //maxValueBP = new Piece[numberOfPieces];
         lvl=-1;
     }
 
@@ -29,7 +27,7 @@ public class Backpack {
                 add(new Piece("FirstAidKit", 4, 1500));
                 add(new Piece("Laptop", 2, 40000));
                 add(new Piece("Bowl", 1,500));
-            };
+            }
         };
     }
 
@@ -37,15 +35,12 @@ public class Backpack {
     public void find(){
         findBestSet(0);
         System.out.println(maxValue);
-        System.out.println("Best set is " + maxValueBP);
+        System.out.println("Best set is " + maxValueBP + " with value " + maxValue);
     }
 
     private void findBestSet(int index){
         if(sumWeight()>maxLoad){
             currentBP.remove(lvl);
-//            int tempValue = sumValue();
-//            if(tempValue >= maxValue)
-//                maxLoad = tempValue;
 
             if(!(currentBP.equals(tempList))) {
                 System.out.println(currentBP + " " + evaluate());
