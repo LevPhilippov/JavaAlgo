@@ -1,5 +1,7 @@
 package lev.filippov;
 
+import java.util.Stack;
+
 public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
     private Node<E> rootNode;
@@ -150,7 +152,49 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
     @Override
     public void display() {
+        Stack<Node> globalStack = new Stack();
+        globalStack.push(rootNode);
+        int nBlanks = 64;
 
+        boolean isRowEmpty = false;
+        System.out.println("................................................................");
+
+        while (!isRowEmpty) {
+            Stack<Node> localStack = new Stack<>();
+
+            isRowEmpty = true;
+            for (int i = 0; i < nBlanks; i++) {
+                System.out.print(" ");
+            }
+
+            while (!globalStack.isEmpty()) {
+                Node tempNode = globalStack.pop();
+                if (tempNode != null) {
+                    System.out.print(tempNode.getValue());
+                    localStack.push(tempNode.getLeftChild());
+                    localStack.push(tempNode.getRightChild());
+                    if (tempNode.getLeftChild() != null || tempNode.getRightChild() != null) {
+                        isRowEmpty = false;
+                    }
+                } else {
+                    System.out.print("--");
+                    localStack.push(null);
+                    localStack.push(null);
+                }
+                for (int j = 0; j < nBlanks * 2 - 2; j++) {
+                    System.out.print(" ");
+                }
+            }
+
+            System.out.println();
+
+            while (!localStack.isEmpty()) {
+                globalStack.push(localStack.pop());
+            }
+
+            nBlanks /= 2;
+        }
+        System.out.println("................................................................");
     }
 
     @Override

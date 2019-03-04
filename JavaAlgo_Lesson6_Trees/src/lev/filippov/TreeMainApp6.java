@@ -9,6 +9,8 @@ public class TreeMainApp6 {
         tree.insert(25);
         tree.insert(18);
         tree.insert(68);
+
+        tree.display();
 //        System.out.println(tree.find(60));
 //        System.out.println(tree.find(25));
 //        System.out.println(tree.find(68));
@@ -23,10 +25,10 @@ public class TreeMainApp6 {
 //        System.out.println("---------------------");
 //        tree.traverse(Tree.TaverseMode.POST_ORDER);
 
-        tree.traverse(Tree.TaverseMode.IN_ORDER);
-        System.out.println("---------------------");
-        System.out.println(tree.delete(20));
-        tree.traverse(Tree.TaverseMode.IN_ORDER);
-        System.out.println("---------------------");
+//        tree.traverse(Tree.TaverseMode.IN_ORDER);
+//        System.out.println("---------------------");
+//        System.out.println(tree.delete(20));
+//        tree.traverse(Tree.TaverseMode.IN_ORDER);
+//        System.out.println("---------------------");
     }
 }
