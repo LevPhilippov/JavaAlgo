@@ -12,7 +12,7 @@ public class TreeMainApp6 {
         Random random = new Random();
 
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
 
             tree = new TreeImpl<>();
 
@@ -22,17 +22,15 @@ public class TreeMainApp6 {
             }
             treeList.add(tree);
         }
-        double treeBalance = 0;
         int unbalancedTrees =0;
-
+//
         for (TreeImpl<Integer> o: treeList) {
             o.display();
-            treeBalance += o.checkBalance();
-            unbalancedTrees += o.findUnbalancedTree();
-            System.out.println();
+            if(!(o.isBalanced()))
+                unbalancedTrees++;
         }
-        System.out.println("Среднеарифметическое процентное соотношение левой стороны дерева к общему количеству элементов: " + treeBalance/treeList.size());
-        System.out.println("Несбалансированных деревьев в процентах: " + unbalancedTrees*100/treeList.size());
+
+        System.out.printf("Количество насбалансированных деревьев в выборке из %1$d составляет %2$d",treeList.size(), unbalancedTrees);
 
     }
 }

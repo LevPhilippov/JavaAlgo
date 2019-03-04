@@ -291,31 +291,46 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         return subNode;
     }
     //пара методов для проверки баланса дерева
-    public double checkBalance() {
-        int startCountFrom = 0;
-        int leftSide= checkSide(rootNode.getLeftChild(), startCountFrom);
-        int rightSide= checkSide(rootNode.getRightChild(), startCountFrom);
-        return leftSide*100/(rightSide+leftSide);
+//    public double checkBalance() {
+//        int startCountFrom = 0;
+//        int leftSide= checkSide(rootNode.getLeftChild(), startCountFrom);
+//        int rightSide= checkSide(rootNode.getRightChild(), startCountFrom);
+//        return leftSide*100/(rightSide+leftSide);
+//
+//    }
+//    public int findUnbalancedTree() {  //преположим, что если у дерева одна меньше 30%
+//        int startCountFrom = 0;
+//        int leftSide= checkSide(rootNode.getLeftChild(), startCountFrom);
+//        int rightSide= checkSide(rootNode.getRightChild(), startCountFrom);
+//
+//        if (leftSide*100/(rightSide+leftSide)<0.3 || rightSide*100/(rightSide+leftSide)<0.3 )
+//            return 1;
+//        else return 0;
+//    }
+//
+//
+//    private int checkSide(Node<E> currentNode, int counter){
+//        if(currentNode==null)
+//            return counter;
+//        counter++;
+//        counter = checkSide(currentNode.getLeftChild(), counter);
+//        counter = checkSide(currentNode.getRightChild(), counter);
+//        return counter;
+//    }
 
+
+    public boolean isBalanced() {
+        return isBalanced(rootNode);
     }
 
-    public int findUnbalancedTree() {  //преположим, что если у дерева одна меньше 30%
-        int startCountFrom = 0;
-        int leftSide= checkSide(rootNode.getLeftChild(), startCountFrom);
-        int rightSide= checkSide(rootNode.getRightChild(), startCountFrom);
-
-        if (leftSide*100/(rightSide+leftSide)<0.3 || rightSide*100/(rightSide+leftSide)<0.3 )
-            return 1;
-        else return 0;
+    private static boolean isBalanced(Node node) {
+        return (node == null) ||
+                isBalanced(node.getLeftChild()) &&
+                        isBalanced(node.getRightChild()) &&
+                        Math.abs(height(node.getLeftChild()) - height(node.getRightChild())) <= 1;
     }
 
-
-    private int checkSide(Node<E> currentNode, int counter){
-        if(currentNode==null)
-            return counter;
-        counter++;
-        counter = checkSide(currentNode.getLeftChild(), counter);
-        counter = checkSide(currentNode.getRightChild(), counter);
-        return counter;
+    private static int height(Node node) {
+        return node == null ? 0 : 1 + Math.max(height(node.getLeftChild()), height(node.getRightChild()));
     }
 }
