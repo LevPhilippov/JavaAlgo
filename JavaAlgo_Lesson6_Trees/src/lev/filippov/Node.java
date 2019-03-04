@@ -2,6 +2,10 @@ package lev.filippov;
 
 public class Node <E extends Comparable <? super E>> {
 
+    //переменная для ограничения глубины пенетрации :DDDD
+    //метод депенетрации не реализован, т.к. нельзя войти в одну реку дважды:d
+    private byte penetrationLevel;
+
     private final E value;
 
     private Node<E> leftChild;
@@ -40,5 +44,13 @@ public class Node <E extends Comparable <? super E>> {
         return "Node{" +
                 "value=" + value +
                 '}';
+    }
+
+    public void penetrate(){
+        penetrationLevel++;
+    }
+
+    public byte getPenetrationLevel() {
+        return penetrationLevel;
     }
 }

@@ -8,6 +8,8 @@ public interface Tree <E extends Comparable <? super E>> {
         POST_ORDER;
     }
 
+    void clear();
+
     void insert(E value);
 
     boolean find(E value);
@@ -17,4 +19,7 @@ public interface Tree <E extends Comparable <? super E>> {
     void display();
 
     void traverse(TaverseMode mode);
+
+    double checkBalance();
+
 }

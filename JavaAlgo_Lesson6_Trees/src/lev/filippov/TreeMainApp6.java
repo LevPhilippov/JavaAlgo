@@ -1,34 +1,35 @@
 package lev.filippov;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class TreeMainApp6 {
+
     public static void main(String[] args) {
-        Tree<Integer> tree = new TreeImpl<>();
-        tree.insert(60);
-        tree.insert(20);
-        tree.insert(70);
-        tree.insert(25);
-        tree.insert(18);
-        tree.insert(68);
 
-        tree.display();
-//        System.out.println(tree.find(60));
-//        System.out.println(tree.find(25));
-//        System.out.println(tree.find(68));
-//        System.out.println(tree.find(70));
-//        System.out.println(tree.find(20));
-//        System.out.println(tree.find(666));
-//
-//
-//        tree.traverse(Tree.TaverseMode.IN_ORDER);
-//        System.out.println("---------------------");
-//        tree.traverse(Tree.TaverseMode.PRE_ORDER);
-//        System.out.println("---------------------");
-//        tree.traverse(Tree.TaverseMode.POST_ORDER);
+        TreeImpl<Integer> tree;
+        ArrayList<TreeImpl<Integer>> treeList = new ArrayList<>();
+        Random random = new Random();
 
-//        tree.traverse(Tree.TaverseMode.IN_ORDER);
-//        System.out.println("---------------------");
-//        System.out.println(tree.delete(20));
-//        tree.traverse(Tree.TaverseMode.IN_ORDER);
-//        System.out.println("---------------------");
+
+        for (int i = 0; i < 20; i++) {
+
+            tree = new TreeImpl<>();
+
+            for (int j = 0; j <20 ; j++) {
+                int value = ((int)((random.nextDouble()*201) - 100));
+                tree.insert(value);
+            }
+            treeList.add(tree);
+        }
+        double treeBalance = 0;
+
+        for (TreeImpl<Integer> o: treeList) {
+            o.display();
+            treeBalance += o.checkBalance();
+            System.out.println();
+        }
+        System.out.println("Среднеарифметическое процентное соотношение левой стороны дерева к общему количеству элементов: " + treeBalance/treeList.size());
+
     }
 }

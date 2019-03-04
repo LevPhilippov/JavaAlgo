@@ -2,9 +2,17 @@ package lev.filippov;
 
 import java.util.Stack;
 
+
 public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
+    public static final int PENETRATION_LEVEL = 4;
     private Node<E> rootNode;
+    private boolean PENETRATION_MODE=true;
+
+    @Override
+    public void clear(){
+        rootNode=null;
+    }
 
     @Override
     public void insert(E value) {
@@ -13,8 +21,20 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         //если вставляется первый элемент
         if(rootNode==null) {
             rootNode = currentNode;
+            //блок пенетрации
+            if (PENETRATION_MODE){
+                currentNode.penetrate();
+            }
+            //блок пенетрации
             return;
         }
+
+        //блок пенетрации
+        if (PENETRATION_MODE){
+            currentNode.penetrate();
+        }
+        //блок пенетрации
+
         //если корень уже существует, ищем место @targetNode для вставляемого элемента
         //элемент-курсор
         Node<E> targetNode = rootNode;
@@ -24,12 +44,27 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             parentNode = targetNode;
             if(value.compareTo(targetNode.getValue()) < 0) { // идем влево от узла
                 targetNode = parentNode.getLeftChild();
+                //блок пенетрации
+                if (PENETRATION_MODE){
+                    if(currentNode.getPenetrationLevel() < PENETRATION_LEVEL)
+                    currentNode.penetrate();
+                    else return;
+                }
+                //блок пенетрации
             }
             else if (value.compareTo(targetNode.getValue()) > 0)  {  //идем вправо от узла
                 targetNode = parentNode.getRightChild();
+                //блок пенетрации
+                if (PENETRATION_MODE){
+                    if(currentNode.getPenetrationLevel() < PENETRATION_LEVEL)
+                        currentNode.penetrate();
+                    else return;
+                }
+                //блок пенетрации
             }
             else { //если мы вставляем элемент, который уже присутствует в дереве
-                throw new IllegalArgumentException("Such element is already exist in the tree.");
+                return;
+                //throw new IllegalArgumentException("Such element is already exist in the tree.");
             }
         }
         //когда место найдено снова делаем проверочную операцию для определения, будет это левый или правый child
@@ -40,6 +75,7 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             parentNode.setRightChild(currentNode);
         }
     }
+
 
     @Override
     public boolean find(E value) {
@@ -253,5 +289,22 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
                 parSubNode.setRightChild(subNode.getRightChild());
             }
         return subNode;
+    }
+    //пара методов для проверки баланса дерева
+    public double checkBalance() {
+        int startCountFrom = 0;
+        int leftSide= checkSide(rootNode.getLeftChild(), startCountFrom);
+        int rightSide= checkSide(rootNode.getRightChild(), startCountFrom);
+        return leftSide*100/(rightSide+leftSide);
+
+    }
+
+    private int checkSide(Node<E> currentNode, int counter){
+        if(currentNode==null)
+            return counter;
+        counter++;
+        counter = checkSide(currentNode.getLeftChild(), counter);
+        counter = checkSide(currentNode.getRightChild(), counter);
+        return counter;
     }
 }
