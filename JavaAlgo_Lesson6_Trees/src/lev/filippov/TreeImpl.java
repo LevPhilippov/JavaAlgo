@@ -299,6 +299,17 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
     }
 
+    public int findUnbalancedTree() {  //преположим, что если у дерева одна меньше 30%
+        int startCountFrom = 0;
+        int leftSide= checkSide(rootNode.getLeftChild(), startCountFrom);
+        int rightSide= checkSide(rootNode.getRightChild(), startCountFrom);
+
+        if (leftSide*100/(rightSide+leftSide)<0.3 || rightSide*100/(rightSide+leftSide)<0.3 )
+            return 1;
+        else return 0;
+    }
+
+
     private int checkSide(Node<E> currentNode, int counter){
         if(currentNode==null)
             return counter;
