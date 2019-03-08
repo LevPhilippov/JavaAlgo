@@ -5,9 +5,19 @@ import java.util.Stack;
 
 public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
-    public static final int PENETRATION_LEVEL = 4;
+    public static final int DEFAULT_PENETRATION_LEVEL = 6;
+    public static int PENETRATION_LEVEL;
     private Node<E> rootNode;
     private boolean PENETRATION_MODE=true;
+
+
+    public TreeImpl(int maxPenetrationLevel) {
+        this.PENETRATION_LEVEL = maxPenetrationLevel;
+    }
+
+    public TreeImpl () {
+        this(DEFAULT_PENETRATION_LEVEL);
+    }
 
     @Override
     public void clear(){
