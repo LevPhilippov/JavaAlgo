@@ -130,14 +130,17 @@ public class Graph<E> {
             temp = getUnvisitedVertex(stack.peek());
             if(temp ==null) {
                 //вывод в консоль
-                System.out.println(stack.pop());
+                System.out.print(stack.pop());
+                System.out.print("-->");
                 continue;
             }
             currentVertex = temp;
             setVisitedDFS(stack, currentVertex);
         }
+        System.out.println();
         System.out.println("Обход закончен");
         //метод для обнуления посещений
+        clearVertexes();
     }
 
     private void setVisitedDFS(Stack<Vertex<E>> stack, Vertex<E> vertex ) {
@@ -153,22 +156,69 @@ public class Graph<E> {
         //проверка пройдена
         setVisitedBFS(queue, indexOf(label));
         Vertex<E> currentVertex=queue.peek() ;
-        Vertex<E> temp;
+        Vertex<E> temp=currentVertex;
         while (!queue.isEmpty()) {
             temp = getUnvisitedVertex(currentVertex);
             if (temp == null) {
-                System.out.println(queue.pop());
+                System.out.print(queue.pop());
+                System.out.print("-->");
                 currentVertex = queue.peek();
                 continue;
             }
             setVisitedBFS(queue, temp);
         }
+        System.out.println("");
+        System.out.println("Обход закончен");
 
+        clearVertexes();
+
+    }
+
+    private void clearVertexes() {
+        for (LinkedList<Vertex<E>> edge : edges) {
+            for (Vertex<E> vertex : edge) {
+                vertex.unVisit();
+                vertex.setPrevious(null);
+            }
+        }
     }
 
     private void setVisitedBFS(LinkedList<Vertex<E>> queue, Vertex<E> vertex) {
         vertex.visit();
+        vertex.setPrevious(queue.peek());
         queue.add(vertex);
     }
 
+    public void  findShortestWay (E start, E finish) {
+        LinkedList<Vertex<E>> queue = new LinkedList<Vertex<E>>();
+        //выполним проверку на наличие такой вершины в графе
+        if(!find(start) || !find(finish))
+            throw new IllegalArgumentException("Указанной вершины не существует!");
+        //проверка пройдена
+        setVisitedBFS(queue, indexOf(start));
+        Vertex<E> currentVertex=queue.peek() ;
+        Vertex<E> temp=currentVertex;
+        while (!queue.isEmpty()) {
+            temp = getUnvisitedVertex(currentVertex);
+            if (temp == null) {
+                queue.pop();
+                currentVertex = queue.peek();
+                continue;
+            }
+            setVisitedBFS(queue, temp);
+            if(temp.getLabel().equals(finish))
+                break;
+        }
+
+        Stack<E> stack = new Stack<>();
+        while (temp !=null) {
+            stack.push(temp.getLabel());
+            temp = temp.getPrevious();
+        }
+        while (!stack.isEmpty()){
+            System.out.print(stack.pop());
+            System.out.println("-->");
+        }
+        clearVertexes();
+    }
 }

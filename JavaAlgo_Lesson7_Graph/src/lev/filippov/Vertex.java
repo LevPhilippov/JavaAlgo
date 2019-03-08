@@ -6,6 +6,8 @@ public class Vertex<E> {
 
     private final E label;
 
+    private Vertex<E> previous;
+
     private boolean isVisited;
 
     public Vertex(E label) {
@@ -29,6 +31,14 @@ public class Vertex<E> {
         return isVisited;
     }
 
+    public Vertex<E> getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(Vertex<E> previous) {
+        this.previous = previous;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,8 +54,6 @@ public class Vertex<E> {
 
     @Override
     public String toString() {
-        return "Vertex{" +
-                "label=" + label +
-                '}';
+        return label.toString();
     }
 }
