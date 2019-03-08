@@ -14,9 +14,9 @@ public class Main7 {
         graph.addEdge("Калуга", "Орел");
         graph.addEdge("Орел", "Курск");
         graph.addEdge("Курск", "Воронеж");
-//        graph.display();
-//        graph.dfs("Москва");
-//        graph.bfs("Москва");
+        graph.display();
+        graph.dfs("Москва");
+        graph.bfs("Москва");
         graph.findShortestWay("Москва", "Воронеж");
 
        // graph.bfs("A");

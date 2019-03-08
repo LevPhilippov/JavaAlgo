@@ -148,11 +148,15 @@ public class Graph<E> {
         stack.peek().visit();
     }
 
-    public void  bfs(E label) {
+    public void bfs (E label) {
+        bfs(label, true);
+    }
+    //boolean переменная mode в состоянии true печатает обход по методу bfs, в состоянии false - используется в алгоритме поиска кратчайшего пути.
+    private void bfs(E label, boolean mode) {
         LinkedList<Vertex<E>> queue = new LinkedList<Vertex<E>>();
         //выполним проверку на наличие такой вершины в графе
         if(!find(label))
-            throw new IllegalArgumentException("Указанной вершины не существует!");
+            throw new IllegalArgumentException("Не существует вершины: " + label);
         //проверка пройдена
         setVisitedBFS(queue, indexOf(label));
         Vertex<E> currentVertex=queue.peek() ;
@@ -160,18 +164,22 @@ public class Graph<E> {
         while (!queue.isEmpty()) {
             temp = getUnvisitedVertex(currentVertex);
             if (temp == null) {
-                System.out.print(queue.pop());
-                System.out.print("-->");
+                if(mode) {
+                    System.out.print(queue.pop());
+                    System.out.print("-->");
+                }
+                queue.pop();
                 currentVertex = queue.peek();
                 continue;
             }
             setVisitedBFS(queue, temp);
         }
-        System.out.println("");
-        System.out.println("Обход закончен");
-
+        if(mode){
+            System.out.println("");
+            System.out.println("Обход закончен");
+        }
+        if(mode)
         clearVertexes();
-
     }
 
     private void clearVertexes() {
@@ -188,28 +196,21 @@ public class Graph<E> {
         vertex.setPrevious(queue.peek());
         queue.add(vertex);
     }
-
+//попробовал использовать реализацию перегруженного метода bfs
     public void  findShortestWay (E start, E finish) {
-        LinkedList<Vertex<E>> queue = new LinkedList<Vertex<E>>();
-        //выполним проверку на наличие такой вершины в графе
-        if(!find(start) || !find(finish))
-            throw new IllegalArgumentException("Указанной вершины не существует!");
-        //проверка пройдена
-        setVisitedBFS(queue, indexOf(start));
-        Vertex<E> currentVertex=queue.peek() ;
-        Vertex<E> temp=currentVertex;
-        while (!queue.isEmpty()) {
-            temp = getUnvisitedVertex(currentVertex);
-            if (temp == null) {
-                queue.pop();
-                currentVertex = queue.peek();
-                continue;
-            }
-            setVisitedBFS(queue, temp);
+        if(!find(finish))
+            throw new IllegalArgumentException("Не существует вершины: " + finish);
+
+        bfs(start, false);
+        Vertex<E> temp = null;
+        for (LinkedList<Vertex<E>> edge : edges) {
+            temp = edge.getFirst();
             if(temp.getLabel().equals(finish))
                 break;
         }
 
+        System.out.printf("Поиск кратчайшего маршрута от %s  к  %s",start,finish);
+        System.out.println();
         Stack<E> stack = new Stack<>();
         while (temp !=null) {
             stack.push(temp.getLabel());
@@ -217,8 +218,9 @@ public class Graph<E> {
         }
         while (!stack.isEmpty()){
             System.out.print(stack.pop());
-            System.out.println("-->");
+            System.out.print("-->");
         }
+        System.out.println();
         clearVertexes();
     }
 }
