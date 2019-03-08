@@ -33,12 +33,33 @@ public class MyArrayFuckingList<E extends Object & Comparable<E>> implements Arr
     }
 
     public int getIndex(E value) {
+
         for (int i = 0; i <CURRENT_SIZE ; i++) {
             if(data[i].equals(value))
                 return i;
         }
         return -1;
 
+    }
+
+
+    public int getBynaryIndex(E value) {
+        return getBynaryIndex(value,0,data.length);
+    }
+
+    private int getBynaryIndex(E value, int low, int high) {
+        if(low>high) {
+            return -1;
+        }
+        int med = (low+high)/2;
+        if(value.compareTo(data[med])==0) {
+            return med;
+        } else if (value.compareTo(data[med])>0) {
+            low = med+1;
+        } else {
+            high=med-1;
+        }
+        return getBynaryIndex(value, low, high);
     }
 
     public boolean remove(E value) {
@@ -111,4 +132,10 @@ public class MyArrayFuckingList<E extends Object & Comparable<E>> implements Arr
         data[index1] = data[index2];
         data[index2] = temp;
     }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(data);
+    }
 }
+
