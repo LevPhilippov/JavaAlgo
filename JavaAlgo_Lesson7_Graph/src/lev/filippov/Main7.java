@@ -15,12 +15,12 @@ public class Main7 {
         graph.addEdge("Орел", "Курск");
         graph.addEdge("Курск", "Воронеж");
         graph.display();
-        graph.dfs("Москва");
-        graph.bfs("Москва");
-        graph.findShortestWay("Москва", "Воронеж");
+//        graph.dfs("Москва");
+//        graph.bfs("Москва");
+     //   graph.findShortestWay("Москва", "Воронеж");
 
-       // graph.bfs("A");
-
+        //graph.bfs("A");
+        graph.findAllWays("Москва", "Воронеж",2);
     }
 
 }

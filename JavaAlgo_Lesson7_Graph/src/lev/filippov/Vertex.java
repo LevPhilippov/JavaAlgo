@@ -1,5 +1,6 @@
 package lev.filippov;
 
+import java.util.LinkedList;
 import java.util.Objects;
 
 public class Vertex<E> {
@@ -10,9 +11,12 @@ public class Vertex<E> {
 
     private boolean isVisited;
 
+    private LinkedList <Vertex<E>> previousLinks;
+
     public Vertex(E label) {
         this.label = label;
         isVisited = false;
+        previousLinks = new LinkedList<Vertex<E>>();
     }
 
     public E getLabel() {
@@ -55,5 +59,9 @@ public class Vertex<E> {
     @Override
     public String toString() {
         return label.toString();
+    }
+
+    public LinkedList<Vertex<E>> getPreviousLinks() {
+        return previousLinks;
     }
 }

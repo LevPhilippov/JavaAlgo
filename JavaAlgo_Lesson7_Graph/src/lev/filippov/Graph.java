@@ -50,8 +50,8 @@ public class Graph<E> {
 
     public void addEdge(E start, E finis) {
         //проверить, есть ли обе вершины
-        Vertex<E> startVertex = indexOf(start);
-        Vertex<E> finisVertex = indexOf(finis);
+        Vertex<E> startVertex = getVertex(start);
+        Vertex<E> finisVertex = getVertex(finis);
         if (startVertex==null)
             throw new IllegalArgumentException("Invalid vertex: " + start);
         else if (finisVertex==null)
@@ -70,11 +70,11 @@ public class Graph<E> {
 
     //метод поиска элемента (true/false)
     public boolean find(E label) {
-        return indexOf(label)!=null;
+        return getVertex(label)!=null;
     }
 
     //поиск элемента по значению (возвращает значение или null)
-    private Vertex<E> indexOf(E label) {
+    private Vertex<E> getVertex(E label) {
         Vertex<E> tempVertex;
         for (LinkedList<Vertex<E>> edge : edges) {
             tempVertex = edge.getFirst();
@@ -104,8 +104,8 @@ public class Graph<E> {
                 break;
             }
         }
-        if (tempEdgeList==null)
-            return null;
+//        if (tempEdgeList==null)
+//            return null;
         //ищем непосещенные элементы
         Vertex<E> tempUnvisitedVertex = null;
 
@@ -122,7 +122,7 @@ public class Graph<E> {
         if(!find(label))
             throw new IllegalArgumentException("Указанной вершины не существует!");
         //проверка пройдена
-        setVisitedDFS(stack, indexOf(label));
+        setVisitedDFS(stack, getVertex(label));
         Vertex<E> currentVertex=null;
         Vertex<E> temp;
 
@@ -158,7 +158,7 @@ public class Graph<E> {
         if(!find(label))
             throw new IllegalArgumentException("Не существует вершины: " + label);
         //проверка пройдена
-        setVisitedBFS(queue, indexOf(label));
+        setVisitedBFS(queue, getVertex(label));
         Vertex<E> currentVertex=queue.peek() ;
         Vertex<E> temp=currentVertex;
         while (!queue.isEmpty()) {
@@ -187,6 +187,7 @@ public class Graph<E> {
             for (Vertex<E> vertex : edge) {
                 vertex.unVisit();
                 vertex.setPrevious(null);
+                vertex.getPreviousLinks().clear();
             }
         }
     }
@@ -222,5 +223,100 @@ public class Graph<E> {
         }
         System.out.println();
         clearVertexes();
+    }
+
+
+    public void findAllWays(E start, E finish, int targetLevel) {
+        Vertex <E> routes = evaluateAllWays(start, finish, targetLevel);
+        System.out.println(routes + " " + routes.getPreviousLinks());
+        for (Vertex<E> vertex : routes.getPreviousLinks()) {
+            printStack(getStack(routes, vertex));
+        }
+        clearVertexes();
+    }
+
+    private void printStack(Stack<Vertex<E>> routeStacks) {
+        while (!routeStacks.isEmpty()) {
+            System.out.print(routeStacks.pop());
+            if(routeStacks.isEmpty())
+                break;
+            System.out.print("->");
+        }
+        System.out.println();
+    }
+
+    private Stack<Vertex<E>> getStack (Vertex<E> finishVertex, Vertex<E> routeVertex) {
+            Stack<Vertex<E>> stack = new Stack<>();
+            stack.push(finishVertex);
+            while(routeVertex != null) {
+                stack.push(routeVertex);
+                routeVertex = routeVertex.getPrevious();
+            }
+            return stack;
+    }
+
+    private Vertex<E> evaluateAllWays (E start, E finish, int targetLevel) {
+        if (!find(start) || !find(finish) || start.equals(finish))
+            throw new IllegalArgumentException("Illegal start of finish point");
+
+        LinkedList<Vertex<E>> queue = new LinkedList<>();
+        LinkedList<Vertex<E>> nextToQueueList = new LinkedList<>();
+        Vertex<E> outerVertex=null, innerVertex=null;
+        int routeLevel=0;
+
+        getVertex(start).visit();
+        queue.add(getVertex(start));
+
+        while(!queue.isEmpty()) {
+
+            while (!queue.isEmpty()) {
+                innerVertex = getUnvisitedVertex(queue.peek());
+
+                while (innerVertex != null) {
+
+                    if (isFinishVertex(finish,innerVertex)) {
+                        outerVertex=innerVertex;
+                        innerVertex.getPreviousLinks().add(queue.peek());
+                        break;
+                    }
+                        nextToQueueList.push(innerVertex);
+                        innerVertex = visitCurrentAndGetNextVertex(queue, innerVertex);
+                }
+
+                queue.pop();
+            }
+
+            if (outerVertex != null) { //здесь всегда будет nullpointerEx
+                if(routeLevel==targetLevel) {
+                    break;
+                }
+
+            routeLevel++;
+            }
+
+            fillTheQueue(queue, nextToQueueList);
+            nextToQueueList.clear();
+        }
+
+        return outerVertex;
+    }
+
+    private boolean isFinishVertex(E finish, Vertex<E> innerVertex) {
+        return innerVertex.getLabel().equals(finish);
+    }
+
+    private void fillTheQueue(LinkedList<Vertex<E>> queue, LinkedList<Vertex<E>> nextToQueueList) {
+        if(!nextToQueueList.isEmpty()){
+            for (Vertex<E> vertex : nextToQueueList) {
+                queue.push(vertex);
+            }
+        }
+    }
+
+    private Vertex<E> visitCurrentAndGetNextVertex(LinkedList<Vertex<E>> queue, Vertex<E> innerVertex) {
+        Vertex<E> previous = queue.peek();
+        innerVertex.visit();
+        innerVertex.setPrevious(previous);
+        return getUnvisitedVertex(previous);
     }
 }
