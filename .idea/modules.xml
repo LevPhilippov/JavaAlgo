@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/JavaAlgo.iml" filepath="$PROJECT_DIR$/.idea/JavaAlgo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson1/JavaAlgo_Lesson1.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson1/JavaAlgo_Lesson1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson4_LinkedList/Lesson4.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson4_LinkedList/Lesson4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson2_Sorting/Sorting.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson2_Sorting/Sorting.iml" />
+    </modules>
+  </component>
+</project>

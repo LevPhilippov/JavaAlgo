@@ -18,8 +18,6 @@ public class MyArrayFuckingList<E extends Object & Comparable<E>> implements Arr
     }
 
 
-    @Override
-
     public void add(E value) {
         ensure_capasity();
         data[CURRENT_SIZE] = value;
