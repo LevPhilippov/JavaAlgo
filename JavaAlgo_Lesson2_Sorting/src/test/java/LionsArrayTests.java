@@ -5,6 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 
 public class LionsArrayTests {
 
@@ -74,8 +77,4 @@ void fillArray() {
         Assertions.assertEquals(87,testArray.get(2));
         Assertions.assertEquals(58,testArray.get(5));
     }
-
-
-
-
 }

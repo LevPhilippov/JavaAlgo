@@ -101,7 +101,7 @@ public class LionsArrayList<E> implements Array<E> {
             int iter = i;
             while (iter > 0 && comparator.compare(data[iter - 1],temp)>=0) {
                 data[iter] = data[iter - 1];
-                --iter;
+                iter--;
             }
             data[iter] = temp;
         }
