@@ -1,6 +1,6 @@
 package lev.filippov;
 
-public interface Array <E extends Comparable<E>> {
+public interface Array <E> {
 
     void add(E value);
     boolean remove(int index);
@@ -10,8 +10,5 @@ public interface Array <E extends Comparable<E>> {
     int getIndex(E value);
     E get(int index);
     int size();
-    void bubbleSort();
-    void insertSort();
-    void selectSort();
 
 }

@@ -1,6 +1,6 @@
 package lev.filippov;
 
-public class LionsSortedArrayList<E extends Object & Comparable<E>> extends LionsArrayList<E>{
+public class LionsSortedArrayList<E extends Object & Comparable<? super E>> extends LionsArrayList<E>{
 
     @Override
     public void add(E value) {

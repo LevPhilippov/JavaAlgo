@@ -1,8 +1,9 @@
 package lev.filippov;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
-public class LionsArrayList<E extends Object & Comparable<E>> implements Array<E> {
+public class LionsArrayList<E> implements Array<E> {
 
     private static final int DEFAULT_CAPACITY = 16;
     public static final int WRONG_INDEX = -1;
@@ -72,34 +73,33 @@ public class LionsArrayList<E extends Object & Comparable<E>> implements Array<E
         return CURRENT_SIZE;
     }
 
-    public void bubbleSort() {
-
+    public void bubbleSort(Comparator<? super E> comparator) {
         for (int i = 0; i < CURRENT_SIZE - 1; i++) {
             for (int j = 0; j < CURRENT_SIZE - i - 1; j++) {
-                if (data[j].compareTo(data[j + 1]) > 0)
+                if (comparator.compare(data[j],data[j + 1])>0)
                     change(j, j + 1);
             }
         }
 
     }
 
-    public void selectSort() {
+    public void selectSort(Comparator<? super E> comparator) {
         int minIndex;
         for (int i = 0; i < CURRENT_SIZE; i++) {
             minIndex = i;
             for (int j = i + 1; j < CURRENT_SIZE; j++) {
-                if (data[j].compareTo(data[minIndex]) < 0)
+                if (comparator.compare(data[j],data[minIndex])< 0)
                     minIndex = j;
             }
             change(i, minIndex);
         }
     }
 
-    public void insertSort() {
+    public void insertSort(Comparator<? super E> comparator) {
         for (int i = 1; i < CURRENT_SIZE; i++) {
             E temp = data[i];
             int iter = i;
-            while (iter > 0 && data[iter - 1].compareTo(temp) >= 0) {
+            while (iter > 0 && comparator.compare(data[iter - 1],temp)>=0) {
                 data[iter] = data[iter - 1];
                 --iter;
             }
