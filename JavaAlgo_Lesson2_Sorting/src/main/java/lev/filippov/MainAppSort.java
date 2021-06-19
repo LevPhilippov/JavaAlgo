@@ -1,12 +1,10 @@
 package lev.filippov;
 
-import java.util.Arrays;
-
 public class MainAppSort {
 
     public static void main(String[] args) {
 
-    MyArrayFuckingList<Integer> list = new MyArrayFuckingList<Integer>(){
+    LionsArrayList<Integer> list = new LionsArrayList<Integer>(){
         {
             add(3);
             add(55);
@@ -22,10 +20,7 @@ public class MainAppSort {
         }
     };
 
-    list.insertSort();
-        System.out.println(list);
 
-        System.out.println(list.getBynaryIndex(27));
     }
 
 
