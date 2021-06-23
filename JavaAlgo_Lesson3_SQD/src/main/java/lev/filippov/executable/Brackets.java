@@ -1,6 +1,7 @@
-package lev.filippov.tests;
+package lev.filippov.executable;
 
-import lev.filippov.Stack;
+import lev.filippov.LionsStack;
+import lev.filippov.interfaces.Stack;
 
 public class Brackets {
 
@@ -10,7 +11,7 @@ public class Brackets {
     }
 
     public void check (String txt) {
-        stack = new Stack(txt.length());
+        stack = new LionsStack(txt.length());
 
         for (int i = 0; i <txt.length() ; i++) {
             switch (txt.charAt(i)) {

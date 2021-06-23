@@ -1,4 +1,4 @@
-package lev.filippov.tests;
+package lev.filippov.executable;
 
 public class Cat {
     int age = -1;

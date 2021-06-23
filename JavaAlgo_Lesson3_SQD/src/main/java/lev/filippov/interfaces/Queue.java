@@ -1,6 +1,6 @@
-package lev.filippov;
+package lev.filippov.interfaces;
 
-public interface QueueInt<E> {
+public interface Queue<E> {
 
     void push(E value);
 

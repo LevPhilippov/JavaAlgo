@@ -1,11 +1,11 @@
 package lev.filippov;
 //
 public class ReverseStringReader {
-    Stack<Character> stack;
+    LionsStack<Character> stack;
 
     public static String read (String msg){
         int msgLength = msg.length();
-        Stack<Character> stack = new Stack<>(msgLength);
+        LionsStack<Character> stack = new LionsStack<>(msgLength);
 
         for (char o: msg.toCharArray()) {
             stack.push(o);

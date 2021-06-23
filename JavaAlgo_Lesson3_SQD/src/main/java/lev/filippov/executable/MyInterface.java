@@ -1,4 +1,4 @@
-package lev.filippov.tests;
+package lev.filippov.executable;
 
 @FunctionalInterface
 public interface MyInterface <K, T> {

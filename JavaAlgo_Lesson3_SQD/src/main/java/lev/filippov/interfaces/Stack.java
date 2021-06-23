@@ -1,8 +1,8 @@
-package lev.filippov;
+package lev.filippov.interfaces;
 
-public interface StackInt<E> {
+public interface Stack<E> {
 
-    void push(E value);
+    boolean push(E value);
 
     E pop();
 

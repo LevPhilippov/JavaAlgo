@@ -1,47 +1,52 @@
 package lev.filippov;
 
-public class Stack <E> implements StackInt <E>{
-    public static final int SIZE = -1;
-    private int size;
+import lev.filippov.interfaces.Stack;
+
+public class LionsStack<E> implements Stack<E> {
+
+    public static final int DEFAULT_SIZE = -1;
+    private int current_index;
     private static final int maxSize = 8;
     private E data[];
 
-    public Stack() {
+    public LionsStack() {
         this(maxSize);
     }
-    public Stack (int maxSize) {
-        size = SIZE;
+
+    public LionsStack(int maxSize) {
+        current_index = DEFAULT_SIZE;
         data = (E[]) new Object[maxSize];
     }
 
-    public void push(E value) {
+    public boolean push(E value) {
         if(isFull())
             throw  new RuntimeException("Stack is full!");
-        data[++size] = value;
+        data[++current_index] = value;
+        return true;
     }
 
     public E pop() {
         if(isEmpty())
             throw  new RuntimeException("Stack is empty!");
-        return data[size--];
+        return data[current_index--];
     }
 
     public E peek() {
         if(isEmpty())
             throw  new RuntimeException("Stack is empty!");
-        return data[size];
+        return data[current_index];
     }
 
     public boolean isFull() {
-        return size == data.length-1;
+        return current_index == data.length-1;
     }
 
     public boolean isEmpty() {
-        return size == SIZE;
+        return current_index == DEFAULT_SIZE;
     }
 
     @Override
     public int getSize() {
-        return size;
+        return current_index+1;
     }
 }
