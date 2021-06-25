@@ -6,7 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Lesson4" />
+        <module name="JavaAlgo_Lesson4_LinkedList" />
         <module name="JavaAlgo_Lesson2_Sorting" />
         <module name="JavaAlgo_Lesson3_SQD" />
         <module name="JavaAlgo_Lesson1" />
@@ -17,7 +17,7 @@
       <module name="JavaAlgo_Lesson2_Sorting" target="1.8" />
       <module name="JavaAlgo_Lesson3_SQD" target="8" />
       <module name="JavaAlgo_Lesson3_Stack_Queue_Deque" target="1.8" />
-      <module name="Lesson4" target="1.8" />
+      <module name="JavaAlgo_Lesson4_LinkedList" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

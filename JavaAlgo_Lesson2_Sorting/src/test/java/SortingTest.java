@@ -1,4 +1,4 @@
-import lev.filippov.LionsArrayList;
+import philippov.LionsArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

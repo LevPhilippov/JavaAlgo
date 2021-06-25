@@ -1,4 +1,4 @@
-package lev.filippov;
+package filippov.lev.filippov;
 
 public interface Tree <E extends Comparable <? super E>> {
 

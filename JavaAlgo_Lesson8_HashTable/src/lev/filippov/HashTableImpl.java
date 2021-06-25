@@ -1,4 +1,4 @@
-package lev.filippov;
+package filippov.lev.filippov;
 
 
 public class HashTableImpl implements HashTable {

@@ -1,12 +1,8 @@
-import lev.filippov.Array;
-import lev.filippov.LionsArrayList;
+import philippov.Array;
+import philippov.LionsArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 
 public class LionsArrayTests {

@@ -1,4 +1,4 @@
-package lev.filippov;
+package filippov.lev.filippov;
 
 import java.util.*;
 import java.util.stream.Stream;

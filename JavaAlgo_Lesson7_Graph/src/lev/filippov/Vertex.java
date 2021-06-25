@@ -1,4 +1,4 @@
-package lev.filippov;
+package filippov.lev.filippov;
 
 import java.util.LinkedList;
 import java.util.Objects;
