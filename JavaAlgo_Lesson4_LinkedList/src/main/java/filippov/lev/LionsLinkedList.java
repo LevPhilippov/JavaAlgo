@@ -2,7 +2,7 @@ package filippov.lev;
 
 import java.util.*;
 
-public class LionsLinkedList<E> implements LinkedList<E>, Iterable<E> {
+public class LionsLinkedList<E> implements LinkedList<E> {
 
     Link<E> newLink;
     Link<E> firstLink;
@@ -101,21 +101,24 @@ public class LionsLinkedList<E> implements LinkedList<E>, Iterable<E> {
         return null;
     }
 
-
-    //...................................методы для итератора.............................
+    //...................................метод итератора.............................
 
     @Override
     public Iterator<E> iterator() {
-        return new LLIterator<>();
+        return new LLIterator<E>(this);
     }
+
+    //...................................Класс итератора.............................
 
     protected class LLIterator<T> implements Iterator<T> {
 //        int cursor = 0;       // index of next element to return
 //        int lastRet = -1; // index of last element returned; -1 if no such
-        Link<E> cursor;
+        Link<T> cursor;
         boolean REMOVED_MARK = false;
+        LionsLinkedList<T> lionsLinkedList;
 
-        public LLIterator() {
+        public LLIterator(LionsLinkedList<T> lionsLinkedList) {
+            this.lionsLinkedList=lionsLinkedList;
             cursor = null;
         }
 
@@ -124,7 +127,7 @@ public class LionsLinkedList<E> implements LinkedList<E>, Iterable<E> {
             if (cursor!=null) {
                 return cursor.nextLink != null;
             } else {
-                return firstLink != null;
+                return lionsLinkedList.firstLink != null;
             }
 //            return (cursor < size);
         }
@@ -133,34 +136,16 @@ public class LionsLinkedList<E> implements LinkedList<E>, Iterable<E> {
         public T next() {
             if(!hasNext()) { throw new NoSuchElementException();}
             if (cursor==null) {
-                cursor=firstLink;
+                cursor=(Link<T>) lionsLinkedList.firstLink;
             } else { cursor = cursor.getNextLink();}
             REMOVED_MARK=false;
             return (T) cursor.getValue();
         }
 
-        /**
-         * Removes from the underlying collection the last element returned
-         * by this iterator (optional operation).  This method can be called
-         * only once per call to {@link #next}.  The behavior of an iterator
-         * is unspecified if the underlying collection is modified while the
-         * iteration is in progress in any way other than by calling this
-         * method.
-         *
-         * @throws UnsupportedOperationException if the {@code remove}
-         *                                       operation is not supported by this iterator
-         * @throws IllegalStateException         if the {@code next} method has not
-         *                                       yet been called, or the {@code remove} method has already
-         *                                       been called after the last call to the {@code next}
-         *                                       method
-         * @implSpec The default implementation throws an instance of
-         * {@link UnsupportedOperationException} and performs no other action.
-         */
-
         @Override
         public void remove() {
             if (REMOVED_MARK) throw new IllegalStateException();
-            LionsLinkedList.this.remove(cursor.value);
+            lionsLinkedList.remove(cursor.getValue());
             REMOVED_MARK=true;
 
 

@@ -1,6 +1,6 @@
 package filippov.lev;
 
-public interface LinkedList<E> {
+public interface LinkedList<E> extends Iterable<E> {
 
     void add(E value);
 

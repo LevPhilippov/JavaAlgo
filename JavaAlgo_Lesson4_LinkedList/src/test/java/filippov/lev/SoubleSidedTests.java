@@ -12,7 +12,6 @@ import java.util.Random;
 public class SoubleSidedTests {
     public static final int SIZE = 1000;
     DoubleSidedLionsLinkedList<Integer> testlist;
-    public final static int WRONG = 777;
     Integer randomValue;
 
     @BeforeEach
