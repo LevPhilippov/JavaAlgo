@@ -2,13 +2,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class Anagramm {
-    private String word;
+
     private char[] chars;
     private HashSet<String> stringSet;
 
 
     public Anagramm(String word) {
-        this.word = word;
         chars = word.toCharArray();
         stringSet = new HashSet<>();
     }

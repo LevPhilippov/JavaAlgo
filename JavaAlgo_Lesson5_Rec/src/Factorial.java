@@ -5,11 +5,9 @@ public class Factorial {
     }
 
     private static long factorial(int arg) {
-
-        if(arg==1) {
+        if (arg == 1) {
             return arg;
         }
-
-        return arg*factorial(arg-1);
+        return arg * factorial(arg - 1);
     }
 }
