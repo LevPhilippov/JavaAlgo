@@ -1,9 +1,9 @@
-package filippov.lev.filippov;
+package lev.filippov;
 
 public class Main8 {
     public static void main(String[] args) {
-        //SimpleAndDoubleHashTableTest();
-        ChainedHashTableTest();
+        SimpleAndDoubleHashTableTest();
+//        ChainedHashTableTest();
 
 
     }
@@ -19,8 +19,6 @@ public class Main8 {
         System.out.println(chained.put(new Item(45, "Apple"), 80));
         System.out.println(chained.size());
 
-        System.out.println("Найдем стоимость элемента Apple с id=45");
-        ((ChainedHashTable) chained).printValue(new Item(45, "Apple"));
 
         chained.display();
 
@@ -31,7 +29,7 @@ public class Main8 {
 
     private static void SimpleAndDoubleHashTableTest() {
 
-        HashTable table = new DoubleHashTableImpl(10);
+        HashTable table = new HashTableImpl(10);
         System.out.println("Добавим 6 элементов");
 
         System.out.println(table.put(new Item(17, "Banana"), 130));
@@ -44,9 +42,7 @@ public class Main8 {
 
         table.display();
         System.out.println("Найдем стоимость элемента Apple с id=45, Tomato с id-77, BigBon c id=28");
-
-        ((HashTableImpl) table).printValue(new Item(77, "Tomato"));
-        ((HashTableImpl) table).printValue(new Item(85, "Apple"));
+        table.getValue(new Item(14, "Corn"));
         System.out.println("Удалим элемент BigBon c id=28");
         System.out.println(table.remove(new Item(28, "BigBon")));
         table.display();

@@ -8,6 +8,9 @@
       <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson3_SQD/JavaAlgo_Lesson3_SQD.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson3_SQD/JavaAlgo_Lesson3_SQD.iml" />
       <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson4_LinkedList/JavaAlgo_Lesson4_LinkedList.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson4_LinkedList/JavaAlgo_Lesson4_LinkedList.iml" />
       <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson5_Rec/JavaAlgo_Lesson5_Rec.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson5_Rec/JavaAlgo_Lesson5_Rec.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson6_Trees/JavaAlgo_Lesson6_Trees.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson6_Trees/JavaAlgo_Lesson6_Trees.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson7_Graph/JavaAlgo_Lesson7_Graph.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson7_Graph/JavaAlgo_Lesson7_Graph.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaAlgo_Lesson8_HashTable/JavaAlgo_Lesson8_HashTable.iml" filepath="$PROJECT_DIR$/JavaAlgo_Lesson8_HashTable/JavaAlgo_Lesson8_HashTable.iml" />
     </modules>
   </component>
 </project>

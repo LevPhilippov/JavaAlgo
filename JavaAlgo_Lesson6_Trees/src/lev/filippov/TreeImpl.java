@@ -1,4 +1,4 @@
-package filippov.lev.filippov;
+package lev.filippov;
 
 import java.util.Stack;
 
@@ -6,17 +6,19 @@ import java.util.Stack;
 public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
     public static final int DEFAULT_PENETRATION_LEVEL = 6;
-    public static int PENETRATION_LEVEL;
+    public static int ALLOWED_PENETRATION_LEVEL;
     private Node<E> rootNode;
-    private boolean PENETRATION_MODE=true;
+    private boolean PENETRATION_MODE;
+    private static boolean DEFAULT_PENETRATION_MODE=false;
 
 
-    public TreeImpl(int maxPenetrationLevel) {
-        this.PENETRATION_LEVEL = maxPenetrationLevel;
+    public TreeImpl(int maxPenetrationLevel, boolean PENETRATION_MODE) {
+        this.ALLOWED_PENETRATION_LEVEL = maxPenetrationLevel;
+        this.PENETRATION_MODE = PENETRATION_MODE;
     }
 
     public TreeImpl () {
-        this(DEFAULT_PENETRATION_LEVEL);
+        this(DEFAULT_PENETRATION_LEVEL, DEFAULT_PENETRATION_MODE);
     }
 
     @Override
@@ -30,55 +32,51 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         Node<E> currentNode = new Node<E>(value);
         //если вставляется первый элемент
         if(rootNode==null) {
+            //блок пенетрации не применяется, т.к. это 0 уровень
             rootNode = currentNode;
-            //блок пенетрации
-            if (PENETRATION_MODE){
-                currentNode.penetrate();
-            }
-            //блок пенетрации
             return;
         }
+//        //блок пенетрации
+//        if (PENETRATION_MODE && currentNode != rootNode){ //we should apply "=" because we have to ensure that a currentNode is not the rootNode
+//            currentNode.penetrate();
+//        }
+        //если rootNode уже существует, ищем место @targetNode для вставляемого элемента
+        Node<E> targetNode = rootNode;//элемент-курсор
+        Node<E> parentNode = rootNode;//элемент-родитель
 
-        //блок пенетрации
-        if (PENETRATION_MODE){
-            currentNode.penetrate();
-        }
-        //блок пенетрации
+        int PENETRATION_LEVEL=0;
 
-        //если корень уже существует, ищем место @targetNode для вставляемого элемента
-        //элемент-курсор
-        Node<E> targetNode = rootNode;
-        //элемент-родитель
-        Node<E> parentNode = rootNode;
         while(targetNode!=null) {
+            if (currentNode.equals(targetNode)) {
+                return; // Element is already exist in a Tree
+            }
             parentNode = targetNode;
-            if(value.compareTo(targetNode.getValue()) < 0) { // идем влево от узла
+
+            if(currentNode.isLeftChild(parentNode)) { // идем влево от узла
                 targetNode = parentNode.getLeftChild();
                 //блок пенетрации
                 if (PENETRATION_MODE){
-                    if(currentNode.getPenetrationLevel() < PENETRATION_LEVEL)
-                    currentNode.penetrate();
-                    else return;
+                    if(++PENETRATION_LEVEL > ALLOWED_PENETRATION_LEVEL)
+                        return;
+//                    if(currentNode.getPenetrationLevel() < ALLOWED_PENETRATION_LEVEL)
+//                    currentNode.penetrate();
+//                    else return;
                 }
-                //блок пенетрации
             }
-            else if (value.compareTo(targetNode.getValue()) > 0)  {  //идем вправо от узла
+            else {  //идем вправо от узла
                 targetNode = parentNode.getRightChild();
                 //блок пенетрации
                 if (PENETRATION_MODE){
-                    if(currentNode.getPenetrationLevel() < PENETRATION_LEVEL)
-                        currentNode.penetrate();
-                    else return;
+                    if(++PENETRATION_LEVEL > ALLOWED_PENETRATION_LEVEL)
+                        return;
+//                    if(currentNode.getPenetrationLevel() < ALLOWED_PENETRATION_LEVEL)
+//                        currentNode.penetrate();
+//                    else return;
                 }
-                //блок пенетрации
-            }
-            else { //если мы вставляем элемент, который уже присутствует в дереве
-                return;
-                //throw new IllegalArgumentException("Such element is already exist in the tree.");
             }
         }
         //когда место найдено снова делаем проверочную операцию для определения, будет это левый или правый child
-        if(value.compareTo(parentNode.getValue()) < 0) { // идем влево от узла
+        if(currentNode.isLeftChild(parentNode)) { // идем влево от узла
             parentNode.setLeftChild(currentNode);
         }
         else {  //идем вправо от узла
@@ -86,20 +84,18 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         }
     }
 
-
     @Override
     public boolean find(E value) {
-        //элемент-курсор
-        Node<E> targetNode = rootNode;
-
+        Node<E> targetNode = rootNode;//элемент-курсор
+        Node<E> requiredNode = new Node<>(value);
         while(targetNode!=null) {
-            if (value.equals(targetNode.getValue()))
+            if (targetNode.equals(requiredNode))
                 return true;
             // идем влево от узла
-            if(value.compareTo(targetNode.getValue()) < 0) {
+            if(requiredNode.isLeftChild(targetNode)) {
                 targetNode = targetNode.getLeftChild();
             }
-            else {  //идем вправо от узла (на этом этапе уже не должно быть одинаковых элементов)
+            else {//идем вправо от узла (на этом этапе уже не должно быть одинаковых элементов)
                 targetNode = targetNode.getRightChild();
             }
         }
@@ -130,20 +126,20 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         //если элемент не найден - вернем false
         if (targetNode==null)
             return false;
+
         //если элемент является листом
-        else if (isLeaf(targetNode)) {
-            if(parentNode.getLeftChild().getValue().equals(value)){
+        if (isLeaf(targetNode)) {
+            if(parentNode.getLeftChild().equals(targetNode)){
                 parentNode.setLeftChild(null);
             }
             else {
                 parentNode.setRightChild(null);
             }
-            //return true;
         }
         //если элемент имеет только одного наследника
         else if (hasOnlyOneChild(targetNode)) {
             //определяем дочерний элемент для удаляемого
-            Node<E> childNode = targetNode.getLeftChild() != null
+            Node<E> childNode = (targetNode.getLeftChild() != null)
                     ? targetNode.getLeftChild()
                     : targetNode.getRightChild();
             //если удаляемы элемент - корень
@@ -151,39 +147,30 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
                 rootNode=childNode;
                 }
             //удаляемый элемент является левым у родителя
-                else if(value.equals(parentNode.getLeftChild().getValue())){
+                else if(targetNode.equals(parentNode.getLeftChild())){
                     parentNode.setLeftChild(childNode);
                 }
                 else {
                     parentNode.setRightChild(childNode);
                 }
-            //если только правый элемент
-                if(value.equals(parentNode.getLeftChild().getValue())){
-                    parentNode.setLeftChild(childNode);
-                }
-                else {
-                    parentNode.setRightChild(childNode);
-                }
-            //return true;
         }
         //если у удаляемого элемента есть оба наследника
         else {
         // поиск идеального кандидата на замену и подмена наследования для subNode
             Node<E> subNode = findSubstitute(targetNode);
             //если у подменного элемента есть правый наследник? то ссылка на него уже присвоена
-            // родителю subNode
+            // родителю subNode (или удаляемому элементу в случае, если у правого наследника targetNode нет левых наследников)
             //подменяем ссылки на левые дочерние элементы
             subNode.setLeftChild(targetNode.getLeftChild());
             //подменем ссылки направые доерние элементы
             subNode.setRightChild(targetNode.getRightChild());
             //меняем ссылку родетеля удаляемого элемента
-            if(value.equals(parentNode.getLeftChild().getValue())){
+            if(targetNode.equals(parentNode.getLeftChild())){
                 parentNode.setLeftChild(subNode);
             }
             else {
                 parentNode.setRightChild(subNode);
             }
-           // return true;
         }
         return true;
     }
@@ -287,17 +274,20 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
     private Node<E> findSubstitute(Node<E> targetNode) {
         Node<E> subNode = targetNode.getRightChild();
         Node<E> parSubNode = targetNode;
+
         while (subNode.getLeftChild()!= null) {
             parSubNode = subNode;
             subNode = subNode.getLeftChild();
         }
-        //заменяем ссылку родителя subNode на дочернюю subNode
+            //если у правого child'a targetNode нет левых наследников
+            if(parSubNode.getRightChild().equals(subNode)) {
+                parSubNode.setRightChild(subNode.getRightChild());
+            } else
+        //если у правого child'a targetNode есть левые наследники
             if(parSubNode.getLeftChild().equals(subNode)){
                 parSubNode.setLeftChild(subNode.getRightChild());
             }
-            else {
-                parSubNode.setRightChild(subNode.getRightChild());
-            }
+
         return subNode;
     }
     //пара методов для проверки баланса дерева

@@ -1,32 +1,29 @@
-package filippov.lev.filippov;
+package lev.filippov;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Graph<E> {
 
-    private final int maxVertexNumber;
+//    private final int maxVertexNumber;
     private List<Vertex<E>> graph;
     private List<LinkedList<Vertex<E>>> edges;
     int size;
 
-    public Graph(int maxVertexNumber) {
-        this.maxVertexNumber = maxVertexNumber;
+    public Graph() {
+//        this.maxVertexNumber = maxVertexNumber;
 //        graph = new ArrayList<Vertex<E>>(maxVertexNumber);
-        edges = new ArrayList<LinkedList<Vertex<E>>>(maxVertexNumber);
+        edges = new ArrayList<LinkedList<Vertex<E>>>();
     }
 
     //метод добавления одного элемента в граф и в список смежности
     public void addVertex(E label) {
         //проверяем что в графе нет экземпляра этой вершины
-        if (find(label))
-            throw new IllegalArgumentException("Такая вершина ужже присутствует в графе");
+        if (contains(label))
+            throw new IllegalArgumentException("Такая вершина уже присутствует в графе");
 //        graph.add(new Vertex<>(label));
-        edges.add(new LinkedList<Vertex<E>>(){
-            {
-                add(new Vertex<>(label));
-            }
-        });
+        LinkedList<Vertex<E>> list = new LinkedList<>();
+        list.add(new Vertex<>(label));
+        edges.add(list);
     }
 
 
@@ -35,6 +32,7 @@ public class Graph<E> {
         Arrays.stream(labels).forEach(this::addVertex);
     }
 
+    //метод добавления нескольких связей для одной вершины
     public void addEgdes(E start, E...finishes) {
         if (!findMatches(start, finishes))
             throw new IllegalArgumentException("Одна или несколько заданных вершин отсутствуют в графе");
@@ -44,42 +42,41 @@ public class Graph<E> {
 
     }
 //проверим, что все подаваемые на вход вершины присутствуют в графе
-    private boolean findMatches(E label, E[] labels) {
-        return Arrays.stream(labels).allMatch(this::find) && find(label);
+    private boolean findMatches(E label, E...labels) {
+        return Arrays.stream(labels).allMatch(this::contains) && Arrays.stream(labels).allMatch(Objects::nonNull) && Objects.nonNull(label) && contains(label) ;
     }
 
-    public void addEdge(E start, E finis) {
+    public void addEdge(E start, E finish) {
         //проверить, есть ли обе вершины
         Vertex<E> startVertex = getVertex(start);
-        Vertex<E> finisVertex = getVertex(finis);
-        if (startVertex==null)
+        Vertex<E> finishVertex = getVertex(finish);
+
+        if (!findMatches(start, finish))
             throw new IllegalArgumentException("Invalid vertex: " + start);
-        else if (finisVertex==null)
-            throw new IllegalArgumentException("Invalid vertex: " + finis);
+
     /*если проверка пройдена - добавить связь между вершинами (запоминание делаем для того чтобы
     сохранить ссылки на элементы в коллекции, а не создавать новые))*/
+
         for (LinkedList<Vertex<E>> edge : edges) {
             if(edge.getFirst().equals(startVertex)) {
-                edge.add(finisVertex);
+                edge.add(finishVertex);
             }
-            else if (edge.getFirst().equals(finisVertex)){
+            else if (edge.getFirst().equals(finishVertex)){
                 edge.add(startVertex);
             }
         }
     }
 
     //метод поиска элемента (true/false)
-    public boolean find(E label) {
+    public boolean contains(E label) {
         return getVertex(label)!=null;
     }
 
     //поиск элемента по значению (возвращает значение или null)
     private Vertex<E> getVertex(E label) {
-        Vertex<E> tempVertex;
         for (LinkedList<Vertex<E>> edge : edges) {
-            tempVertex = edge.getFirst();
-            if (((Vertex) tempVertex).getLabel().equals(label))
-                return tempVertex;
+            if ((edge.getFirst()).getLabel().equals(label))
+                return edge.getFirst();
         }
         return null;
     }
@@ -96,11 +93,11 @@ public class Graph<E> {
 //обход и методы обхода
 
     private Vertex<E> getUnvisitedVertex(Vertex<E> vertex) {
-        //находим нуный список
+        //находим нужный список
        LinkedList <Vertex<E>> tempEdgeList = null;
-        for (LinkedList<Vertex<E>> edge : edges) {
-            if(edge.getFirst().equals(vertex)) {
-                tempEdgeList = edge;
+        for (LinkedList<Vertex<E>> edgeList : edges) {
+            if(edgeList.getFirst().equals(vertex)) {
+                tempEdgeList = edgeList;
                 break;
             }
         }
@@ -110,76 +107,85 @@ public class Graph<E> {
         Vertex<E> tempUnvisitedVertex = null;
 
         for (int i = 0; i<tempEdgeList.size();i++) {
-            if (!tempEdgeList.get(i).isVisited())
+            if (!tempEdgeList.get(i).isVisited()) {
                 tempUnvisitedVertex = tempEdgeList.get(i);
+                break;
+            }
         }
         return tempUnvisitedVertex;
     }
 
     public void dfs(E label){
-        Stack <Vertex<E>> stack = new Stack<>();
         //выполним проверку на наличие такой вершины в графе
-        if(!find(label))
+        if(!contains(label))
             throw new IllegalArgumentException("Указанной вершины не существует!");
         //проверка пройдена
-        setVisitedDFS(stack, getVertex(label));
-        Vertex<E> currentVertex=null;
-        Vertex<E> temp;
+        Stack <Vertex<E>> utilityStack = new Stack<>();
+        Stack <Vertex<E>> displayStack = new Stack<>();
+        setVisited(utilityStack, getVertex(label));
+        Vertex<E> unvisitedVertex;
 
-        while(!stack.isEmpty()) {
-            temp = getUnvisitedVertex(stack.peek());
-            if(temp ==null) {
-                //вывод в консоль
-                System.out.print(stack.pop());
-                System.out.print("-->");
+        while(!utilityStack.isEmpty()) {
+            unvisitedVertex = getUnvisitedVertex(utilityStack.peek());
+            if(unvisitedVertex != null){
+                setVisited(utilityStack, unvisitedVertex);
                 continue;
             }
-            currentVertex = temp;
-            setVisitedDFS(stack, currentVertex);
+            //вывод в консоль
+            displayStack.push(utilityStack.pop());
         }
-        System.out.println();
-        System.out.println("Обход закончен");
-        //метод для обнуления посещений
+        System.out.println("Начало обхода в глубину");
+
+        while(!displayStack.isEmpty()) {
+            System.out.print(displayStack.pop() + "-->");
+        }
+
+        System.out.println("\nОбход закончен");
+        //метод для обнуления состояния вершин
         clearVertexes();
     }
 
-    private void setVisitedDFS(Stack<Vertex<E>> stack, Vertex<E> vertex ) {
+    private void setVisited(Stack<Vertex<E>> stack, Vertex<E> vertex ) {
         stack.push(vertex);
         stack.peek().visit();
     }
 
+    private void setVisited(Queue<Vertex<E>> queue, Vertex<E> vertex) {
+        vertex.visit();
+        vertex.setPrevious(queue.peek());
+        queue.add(vertex);
+    }
+
+
     public void bfs (E label) {
         bfs(label, true);
     }
-    //boolean переменная mode в состоянии true печатает обход по методу bfs, в состоянии false - используется в алгоритме поиска кратчайшего пути.
-    private void bfs(E label, boolean mode) {
-        LinkedList<Vertex<E>> queue = new LinkedList<Vertex<E>>();
+    //boolean переменная displayMode в состоянии true печатает обход по методу bfs, в состоянии false - используется в алгоритме поиска кратчайшего пути.
+    private void bfs(E label, boolean displayMode) {
         //выполним проверку на наличие такой вершины в графе
-        if(!find(label))
-            throw new IllegalArgumentException("Не существует вершины: " + label);
+        if(!contains(label))
+            throw new IllegalArgumentException("Указанной вершины не существует!");
         //проверка пройдена
-        setVisitedBFS(queue, getVertex(label));
-        Vertex<E> currentVertex=queue.peek() ;
-        Vertex<E> temp=currentVertex;
+        Queue<Vertex<E>> queue = new LinkedList<Vertex<E>>(), displayList = new LinkedList<>();
+        setVisited(queue, getVertex(label));
+        Vertex<E> tempVertex=null;
+
         while (!queue.isEmpty()) {
-            temp = getUnvisitedVertex(currentVertex);
-            if (temp == null) {
-                if(mode) {
-                    System.out.print(queue.pop());
-                    System.out.print("-->");
-                }
-                queue.pop();
-                currentVertex = queue.peek();
+            tempVertex = getUnvisitedVertex(queue.peek());
+            if (tempVertex != null) {
+                setVisited(queue, tempVertex);
                 continue;
             }
-            setVisitedBFS(queue, temp);
+            displayList.add(queue.poll());
         }
-        if(mode){
-            System.out.println("");
-            System.out.println("Обход закончен");
+
+        if(displayMode){
+            System.out.println("\nНачало обхода в ширину");
+            while(!displayList.isEmpty())
+                System.out.print(displayList.poll() + "-->");
+            System.out.println("\nОбход закончен");
+            clearVertexes();
         }
-        if(mode)
-        clearVertexes();
     }
 
     private void clearVertexes() {
@@ -192,46 +198,35 @@ public class Graph<E> {
         }
     }
 
-    private void setVisitedBFS(LinkedList<Vertex<E>> queue, Vertex<E> vertex) {
-        vertex.visit();
-        vertex.setPrevious(queue.peek());
-        queue.add(vertex);
-    }
-//попробовал использовать реализацию перегруженного метода bfs
+//find shortest way algo
     public void  findShortestWay (E start, E finish) {
-        if(!find(finish))
-            throw new IllegalArgumentException("Не существует вершины: " + finish);
+        if(!contains(finish) || !contains(start))
+            throw new IllegalArgumentException("Не существует вершины!");
 
         bfs(start, false);
         Vertex<E> temp = null;
+
         for (LinkedList<Vertex<E>> edge : edges) {
-            temp = edge.getFirst();
+            temp = edge.peek();
             if(temp.getLabel().equals(finish))
                 break;
         }
 
-        System.out.printf("Поиск кратчайшего маршрута от %s  к  %s",start,finish);
-        System.out.println();
-        Stack<E> stack = new Stack<>();
-        while (temp !=null) {
-            stack.push(temp.getLabel());
+        System.out.printf("Поиск кратчайшего маршрута от %s  к  %s\n",start,finish);
+        Stack<Vertex<E>> stack = new Stack<>();
+
+        while (!temp.getLabel().equals(start)) {
+            stack.push(temp);
             temp = temp.getPrevious();
         }
+        stack.push(temp);
+
         while (!stack.isEmpty()){
-            System.out.print(stack.pop());
+            System.out.print(stack.pop().getLabel());
             System.out.print("-->");
         }
+
         System.out.println();
-        clearVertexes();
-    }
-
-
-    public void findAllWays(E start, E finish, int targetLevel) {
-        Vertex <E> routes = evaluateAllWays(start, finish, targetLevel);
-        System.out.println(routes + " " + routes.getPreviousLinks());
-        for (Vertex<E> vertex : routes.getPreviousLinks()) {
-            printStack(getStack(routes, vertex));
-        }
         clearVertexes();
     }
 
@@ -255,68 +250,5 @@ public class Graph<E> {
             return stack;
     }
 
-    private Vertex<E> evaluateAllWays (E start, E finish, int targetLevel) {
-        if (!find(start) || !find(finish) || start.equals(finish))
-            throw new IllegalArgumentException("Illegal start of finish point");
 
-        LinkedList<Vertex<E>> queue = new LinkedList<>();
-        LinkedList<Vertex<E>> nextToQueueList = new LinkedList<>();
-        Vertex<E> outerVertex=null, innerVertex=null;
-        int routeLevel=0;
-
-        getVertex(start).visit();
-        queue.add(getVertex(start));
-
-        while(!queue.isEmpty()) {
-
-            while (!queue.isEmpty()) {
-                innerVertex = getUnvisitedVertex(queue.peek());
-
-                while (innerVertex != null) {
-
-                    if (isFinishVertex(finish,innerVertex)) {
-                        outerVertex=innerVertex;
-                        innerVertex.getPreviousLinks().add(queue.peek());
-                        break;
-                    }
-                        nextToQueueList.push(innerVertex);
-                        innerVertex = visitCurrentAndGetNextVertex(queue, innerVertex);
-                }
-
-                queue.pop();
-            }
-
-            if (outerVertex != null) { //здесь всегда будет nullpointerEx
-                if(routeLevel==targetLevel) {
-                    break;
-                }
-
-            routeLevel++;
-            }
-
-            fillTheQueue(queue, nextToQueueList);
-            nextToQueueList.clear();
-        }
-
-        return outerVertex;
-    }
-
-    private boolean isFinishVertex(E finish, Vertex<E> innerVertex) {
-        return innerVertex.getLabel().equals(finish);
-    }
-
-    private void fillTheQueue(LinkedList<Vertex<E>> queue, LinkedList<Vertex<E>> nextToQueueList) {
-        if(!nextToQueueList.isEmpty()){
-            for (Vertex<E> vertex : nextToQueueList) {
-                queue.push(vertex);
-            }
-        }
-    }
-
-    private Vertex<E> visitCurrentAndGetNextVertex(LinkedList<Vertex<E>> queue, Vertex<E> innerVertex) {
-        Vertex<E> previous = queue.peek();
-        innerVertex.visit();
-        innerVertex.setPrevious(previous);
-        return getUnvisitedVertex(previous);
-    }
 }

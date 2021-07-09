@@ -1,10 +1,9 @@
-package filippov.lev.filippov;
+package lev.filippov;
 
 public class Node <E extends Comparable <? super E>> {
 
-    //переменная для ограничения глубины пенетрации :DDDD
+    //переменная для ограничения глубины пенетрации
     //метод депенетрации не реализован, т.к. нельзя войти в одну реку дважды:d
-    private byte penetrationLevel;
 
     private final E value;
 
@@ -36,7 +35,7 @@ public class Node <E extends Comparable <? super E>> {
     }
 
     public boolean equals(Node<E> value) {
-        return this.getValue().equals(value.getValue());
+        return this.value.equals(value.getValue());
     }
 
     @Override
@@ -46,11 +45,9 @@ public class Node <E extends Comparable <? super E>> {
                 '}';
     }
 
-    public void penetrate(){
-        penetrationLevel++;
+
+    public boolean isLeftChild(Node<E> node) {
+        return this.value.compareTo(node.getValue()) <0;
     }
 
-    public byte getPenetrationLevel() {
-        return penetrationLevel;
-    }
 }
